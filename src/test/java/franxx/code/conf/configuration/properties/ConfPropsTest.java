@@ -1,11 +1,16 @@
 package franxx.code.conf.configuration.properties;
 
+import franxx.code.conf.converter.StringToDateConv;
 import franxx.code.conf.properties.AppProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.ConversionService;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -19,6 +24,18 @@ public class ConfPropsTest {
 
     @Autowired
     private AppProperties properties;
+
+    @Autowired
+    private ConversionService conversionService;
+
+    @Test
+    void conversionManually() {
+        assertTrue(conversionService.canConvert(String.class, Duration.class));
+        assertTrue(conversionService.canConvert(String.class, Date.class));
+
+        Duration duration = conversionService.convert("10s", Duration.class);
+        assertEquals(Duration.ofSeconds(10), duration);
+    }
 
     @Test
     void create() {
@@ -76,6 +93,14 @@ public class ConfPropsTest {
     @EnableConfigurationProperties({
             AppProperties.class
     })
+    @Import(StringToDateConv.class)
     static class AppTest {
+
+        @Bean
+        public ConversionService conversionService(StringToDateConv toDateConv) {
+            ApplicationConversionService service = new ApplicationConversionService();
+            service.addConverter(toDateConv);
+            return service;
+        }
     }
 }
