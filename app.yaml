@@ -1,0 +1,4 @@
+application:
+  name: yaml yaml
+  version: 33
+  production-mode: true
