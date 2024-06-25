@@ -1,7 +1,6 @@
 package franxx.code.conf.configuration.properties;
 
 import franxx.code.conf.properties.AppProperties;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +22,14 @@ public class ConfPropsTest {
         assertFalse(properties.isProductionMode());
         System.out.println(properties.getName());
         System.out.println(properties.isProductionMode());
+    }
+
+    @Test
+    void embeddedObject() {
+        assertEquals("me", properties.getDatabase().getUsername());
+        assertEquals("franxx", properties.getDatabase().getPassword());
+        assertEquals("code", properties.getDatabase().getDatabase());
+        assertEquals("jdbc:/pp", properties.getDatabase().getUrl());
     }
 
     @SpringBootApplication
