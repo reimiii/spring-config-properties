@@ -44,7 +44,7 @@ public class ValueTest {
             @Value("${application.version}")
             private Integer version;
 
-            @Value("${application.production.mode}")
+            @Value("${application.production-mode}")
             private boolean productionMode;
 
         }
