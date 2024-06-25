@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = ConfPropsTest.AppTest.class)
@@ -30,6 +32,29 @@ public class ConfPropsTest {
         assertEquals("franxx", properties.getDatabase().getPassword());
         assertEquals("code", properties.getDatabase().getDatabase());
         assertEquals("jdbc:/pp", properties.getDatabase().getUrl());
+    }
+
+    @Test
+    void collectionTest() {
+        assertEquals(List.of("user", "products", "categories"), properties.getDatabase().getWhiteListTables());
+        assertEquals(100, properties.getDatabase().getMaxTablesSize().get("user"));
+        assertEquals(100, properties.getDatabase().getMaxTablesSize().get("products"));
+        assertEquals(100, properties.getDatabase().getMaxTablesSize().get("categories"));
+    }
+
+    @Test
+    void EmbeddedCollection() {
+        System.out.println(properties.getDefaultRoles().get(0).getId());
+        assertEquals("default", properties.getDefaultRoles().get(0).getId());
+        assertEquals("default role", properties.getDefaultRoles().get(0).getName());
+        assertEquals("guess", properties.getDefaultRoles().get(1).getId());
+        assertEquals("guess role", properties.getDefaultRoles().get(1).getName());
+        assertEquals(2, properties.getDefaultRoles().size());
+
+        assertEquals("admin", properties.getRoles().get("admin").getId());
+        assertEquals("admin role", properties.getRoles().get("admin").getName());
+        assertEquals("moderator", properties.getRoles().get("moderator").getId());
+        assertEquals("moderator role", properties.getRoles().get("moderator").getName());
     }
 
     @SpringBootApplication
