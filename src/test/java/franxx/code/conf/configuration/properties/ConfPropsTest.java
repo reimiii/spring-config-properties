@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +58,18 @@ public class ConfPropsTest {
         assertEquals("admin role", properties.getRoles().get("admin").getName());
         assertEquals("moderator", properties.getRoles().get("moderator").getId());
         assertEquals("moderator role", properties.getRoles().get("moderator").getName());
+    }
+
+    @Test
+    void testDuration() {
+        assertEquals(Duration.ofSeconds(10), properties.getDefaultTimeOut());
+    }
+
+    @Test
+    void testCustomConverter() {
+        Date expiredDate = properties.getExpiredDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        assertEquals("2024-08-08", dateFormat.format(expiredDate));
     }
 
     @SpringBootApplication
